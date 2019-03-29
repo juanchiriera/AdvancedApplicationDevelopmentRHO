@@ -73,7 +73,7 @@ pipeline {
             dir('openshift-tasks'){
               script {
                 echo "Running Code Analysis"
-                  sh "${mvnCmd} sonar:sonar -Dsonar.host.url=http://sonarqube-${prefix}-sonarqube.apps.fab.example.opentlc.com/ -Dsonar.projectName=${JOB_BASE_NAME} -Dsonar.projectVersion=${devTag}"
+                  sh "${mvnCmd} sonar:sonar -Dsonar.host.url=http://sonarqube-gpte-hw-cicd.apps.na311.openshift.opentlc.com/ -Dsonar.projectName=${JOB_BASE_NAME} -Dsonar.projectVersion=${devTag}"
               }
             }
           }
@@ -145,7 +145,7 @@ pipeline {
       }
     }
 
-    // Run Integration Tests in the Development Environment.
+    /* // Run Integration Tests in the Development Environment.
     stage('Integration Tests') {
       steps {
         echo "Running Integration Tests"
@@ -173,7 +173,7 @@ pipeline {
           }
         }
       }
-    }
+    } */
 
     // Copy Image to Nexus Docker Registry
     stage('Copy Image to Nexus Docker Registry') {
