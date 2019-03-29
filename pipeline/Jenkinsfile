@@ -3,7 +3,7 @@ def prefix      = "xyz"
 
 // Set variable globally to be available in all stages
 // Set Maven command to always include Nexus Settings
-def mvnCmd      = "mvn -s nexus_openshift_settings.xml"
+def mvnCmd      = "mvn -s ../nexus_settings.xml"
 // Set Development and Production Project Names
 def devProject  = "xyz-tasks-dev"
 def prodProject = "xyz-tasks-prod"
