@@ -49,7 +49,7 @@ pipeline {
       steps {
         dir('openshift-tasks') {
           echo "Building version ${devTag}"
-          //sh "${mvnCmd} clean package -DskipTests=true"
+          sh "${mvnCmd} clean package -DskipTests=true"
         }
       }
     }
