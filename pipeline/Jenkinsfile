@@ -5,8 +5,8 @@ def prefix      = "xyz"
 // Set Maven command to always include Nexus Settings
 def mvnCmd      = "mvn -s ../nexus_settings.xml"
 // Set Development and Production Project Names
-def devProject  = "xyz-tasks-dev"
-def prodProject = "xyz-tasks-prod"
+def devProject  = "tasks-dev"
+def prodProject = "tasks-prod"
 // Set the tag for the development image: version + build number
 def devTag      = "0.0-0"
 // Set the tag for the production image: version
