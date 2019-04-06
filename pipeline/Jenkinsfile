@@ -136,7 +136,7 @@ pipeline {
     stage('Deploy to Dev') {
       steps {
         echo "Deploying container image to Development Project"
-        /* script {
+         script {
           // Update the Image on the Development Deployment Config
           openshift.withCluster() {
             openshift.withProject("${devProject}") {
@@ -162,7 +162,7 @@ pipeline {
               }
             }
           }
-        }*/
+        }
       } 
     }
 
