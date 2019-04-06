@@ -46,13 +46,14 @@ podTemplate(
       }
 
       // TBD: The next two stages should run in parallel
-      parallel{
+      parallel UnitTests:{
         // Using Maven run the unit tests
         stage('Unit Tests') {
           echo "Running Unit Tests"
           sh "${mvnCmd} test"
         }
-
+      },
+      CodeAnalysis:{
         // Using Maven to call SonarQube for Code Analysis
         stage('Code Analysis') {
           echo "Running Code Analysis"
