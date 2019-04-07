@@ -100,9 +100,9 @@ podTemplate(
             openshift.withProject("${devProject}") {
               openshift.set("image", "dc/tasks", "tasks=docker-registry.default.svc:5000/${devProject}/tasks:${devTag}")
 
-              def dc = openshift.selector("dc", "tasks").object()
-              dc.spec.template.spec.containers[0].env[0].value="${devTag} (tasks-dev)"
-              openshift.apply(dc)
+              // def dc = openshift.selector("dc", "tasks").object()
+              // dc.spec.template.spec.containers[0].env[0].value="${devTag} (tasks-dev)"
+              // openshift.apply(dc)
               // Update the Config Map which contains the users for the Tasks application
               // (just in case the properties files changed in the latest commit)
               openshift.selector('configmap', 'tasks-config').delete()
