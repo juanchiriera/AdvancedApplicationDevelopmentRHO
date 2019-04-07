@@ -1,16 +1,18 @@
 #!groovy
 podTemplate(
   label: "skopeo-pod",
+  labels: "skopeo-pod",
   cloud: "openshift",
   inheritFrom: "maven",
   containers: [
     containerTemplate(
       name: "jnlp",
-      image: "docker-registry.default.svc:5000/bfa7-jenkins/jenkins-agent-appdev",
+      image: "docker-registry.default.svc:5000/bfa7-jenkins/jenkins-agent-appdev:latest",
       resourceRequestMemory: "1Gi",
       resourceLimitMemory: "2Gi",
       resourceRequestCpu: "1",
-      resourceLimitCpu: "2"
+      resourceLimitCpu: "2",
+      serviceAccount: "jenkins"
     )
   ]
 ) {
