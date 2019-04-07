@@ -99,9 +99,6 @@ podTemplate(
           openshift.withCluster() {
             openshift.withProject("${devProject}") {
               openshift.set("image", "dc/tasks", "tasks=docker-registry.default.svc:5000/${devProject}/tasks:${devTag}")
-              def dc = openshift.selector("dc", "tasks").object()
-              dc.spec.template.spec.containers[0].env[0].value="${devTag} (tasks-dev)"
-              // openshift.apply(dc)
               // Update the Config Map which contains the users for the Tasks application
               // (just in case the properties files changed in the latest commit)
               openshift.selector('configmap', 'tasks-config').delete()
@@ -111,7 +108,10 @@ podTemplate(
               openshift.selector("dc", "tasks").rollout().latest();
 
               // Wait for application to be deployed
+              def dc = openshift.selector("dc", "tasks").object()
               def dc_version = dc.status.latestVersion
+              dc.spec.template.spec.containers[0].env[0].value="${devTag} (tasks-dev)"
+              openshift.apply(dc)
               echo "${dc_version}"
               def rc = openshift.selector("rc", "tasks-${dc_version}").object()
               echo "${rc.spec.replicas} - ${rc.status.readyReplicas}"
