@@ -99,10 +99,9 @@ podTemplate(
           openshift.withCluster() {
             openshift.withProject("${devProject}") {
               openshift.set("image", "dc/tasks", "tasks=docker-registry.default.svc:5000/${devProject}/tasks:${devTag}")
-
               def dc = openshift.selector("dc", "tasks").object()
-              // dc.spec.template.spec.containers[0].env[0].value="${devTag} (tasks-dev)"
-              // openshift.apply(dc)
+              dc.spec.template.spec.containers[0].env[0].value="${devTag} (tasks-dev)"
+              openshift.apply(dc)
               // Update the Config Map which contains the users for the Tasks application
               // (just in case the properties files changed in the latest commit)
               openshift.selector('configmap', 'tasks-config').delete()
@@ -113,8 +112,9 @@ podTemplate(
 
               // Wait for application to be deployed
               def dc_version = dc.status.latestVersion
+              echo "${dc_version}"
               def rc = openshift.selector("rc", "tasks-${dc_version}").object()
-
+              echo "${rc.spec.replicas} - ${rc.status.readyReplicas}"
               echo "Waiting for ReplicationController tasks-${dc_version} to be ready"
               while (rc.spec.replicas != rc.status.readyReplicas) {
                 sleep 5
