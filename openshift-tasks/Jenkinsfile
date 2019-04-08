@@ -12,7 +12,6 @@ podTemplate(
       resourceLimitMemory: "2Gi",
       resourceRequestCpu: "1",
       resourceLimitCpu: "2",
-      serviceAccount: "jenkins"
     )
   ]
 ) {
@@ -29,9 +28,6 @@ podTemplate(
 
     // Build the Tasks Service
     dir('openshift-tasks') {
-      // The following variables need to be defined at the top level
-      // and not inside the scope of a stage - otherwise they would not
-      // be accessible from other stages.
       // Extract version from the pom.xml
       def version = getVersionFromPom("pom.xml")
 
@@ -78,9 +74,6 @@ podTemplate(
           openshift.withCluster() {
             openshift.withProject("${devProject}") {
               openshift.selector("bc", "tasks").startBuild("--from-file=./target/openshift-tasks.war", "--wait=true")
-
-              // OR use the file you just published into Nexus:
-              // "--from-file=http://nexus3.${prefix}-nexus.svc.cluster.local:8081/repository/releases/org/jboss/quickstarts/eap/tasks/${version}/tasks-${version}.war"
               openshift.tag("tasks:latest", "tasks:${devTag}")
             }
           }
@@ -131,7 +124,7 @@ podTemplate(
 
         // TBD: Copy image to Nexus container registry
         script {
-          sh "skopeo copy --src-tls-verify=false --dest-tls-verify=false --src-creds openshift:\$(oc whoami -t) --dest-creds admin:redhat docker://docker-registry.default.svc.cluster.local:5000/${devProject}/tasks:${devTag} docker://nexus-registry.gpte-hw-cicd.svc.cluster.local:5000/tasks:${devTag}"
+          sh "skopeo copy --src-tls-verify=false --dest-tls-verify=false --src-creds openshift:\$(oc whoami -t) --dest-creds admin:redhat docker://docker-registry.default.svc.cluster.local:5000/${devProject}/tasks:${devTag} docker://nexus-registry-gpte-hw-cicd.apps.na311.openshift.opentlc.com/tasks:${prodTag}"
 
         // TBD: Tag the built image with the production tag.
           openshift.withCluster() {
