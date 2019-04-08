@@ -104,13 +104,14 @@ podTemplate(
               openshift.selector('configmap', 'tasks-config').delete()
               def configmap = openshift.create('configmap', 'tasks-config', '--from-file=./configuration/application-users.properties', '--from-file=./configuration/application-roles.properties' )
 
-              // Deploy the development application.
-              openshift.selector("dc", "tasks").rollout().latest();
 
               // Wait for application to be deployed
               def dc = openshift.selector("dc", "tasks").object()
               dc.spec.template.spec.containers[0].env[0].value="${devTag} (tasks-dev)"
               openshift.apply(dc)
+
+              // Deploy the development application.
+              dc.rollout().latest();
               
               def dc_version = dc.status.latestVersion
               echo "${dc_version}"
